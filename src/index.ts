@@ -183,7 +183,7 @@ export class VirutalListDataManager<T = any> {
 
     // 因为 Taro 的 原因,  这里不能本身依赖于 Taro
     if (typeof Taro === 'object' && Taro) {
-      ratio = Taro.getSystemInfoSync().windowWidth / 375;
+      RATIO = Taro.getSystemInfoSync().windowWidth / 375;
     }
 
     keys.forEach(key => {

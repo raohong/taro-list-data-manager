@@ -49,7 +49,7 @@ export interface VirutalListDataManagerState<T> {
 }
 
 export class VirutalListDataManager<T = any> {
-  constructor(options: VirutalListDataManagerOptions<T>);
+  constructor(options: VirutalListDataManagerOptions<T>, Taro?:any);
 
   updateConfig: (config: Partial<VirutalListDataManagerOptions<T>>) => void;
   getItemCount: () => number;

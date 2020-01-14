@@ -1,11 +1,13 @@
 {
   "name": "taro-list-data-manager",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "taro-list 虚拟列表数据管理",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "typings": "./index.d.ts",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "keywords": [],
   "author": "raohong",
   "license": "MIT",
