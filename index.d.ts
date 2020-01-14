@@ -73,3 +73,6 @@ export class VirutalListDataManager<T = any> {
     onStateChange: (prevState: VirutalListDataManagerState<T>) => void
   ) => void;
 }
+
+
+export default VirutalListDataManager;
