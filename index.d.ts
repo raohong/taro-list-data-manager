@@ -60,4 +60,12 @@ export class VirutalListDataManager<T = any> {
   get: () => T[];
   pop: () => T | undefined;
   forceUpdate: () => void;
+  destroy: () => void;
+
+  __nextTickUpdate: () => void;
+  __getState: () => VirutalListDataManagerState<T>;
+  __setUpdater: (cb: VirutalListDataManagerUpdater<T>) => void;
+  __setOnStateChange: (
+    onStateChange: (prevState: VirutalListDataManagerState<T>) => void
+  ) => void;
 }
