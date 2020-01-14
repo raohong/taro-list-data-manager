@@ -61,6 +61,10 @@ export class VirutalListDataManager<T = any> {
   pop: () => T | undefined;
   forceUpdate: () => void;
   destroy: () => void;
+  setLoadStatus: (
+    customData?: Record<string | number, any>
+  ) => ILoadStatusResult<T>;
+  clearAllLoadStatus: (id?: string) => void;
 
   __nextTickUpdate: () => void;
   __getState: () => VirutalListDataManagerState<T>;
