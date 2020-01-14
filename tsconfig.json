@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "esnext",
+    "target": "es2015",
+    "lib": ["esnext", "dom"],
+    "sourceMap": false,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "tests",
+    "tslint:latest",
+    "tslint-config-prettier"
+  ]
+}
