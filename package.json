@@ -1,43 +1,20 @@
 {
   "name": "taro-list-data-manager",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "taro-list 虚拟列表数据管理",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "typings": "/dist/index.d.ts",
-  "scripts": {
-    "prettier": "prettier --config .prettierrc --write \"./{src,tests}/**/*.{less,ts,tsx,js}\" \"!./{build.dist}/**\"",
-    "tslint": "tslint -p tsconfig.json",
-    "lint-staged": "lint-staged"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+  "typings": "./index.d.ts",
+  "scripts": {},
   "keywords": [],
   "author": "raohong",
-  "license": "MIt",
-  "lint-staged": {
-    "**/*.{ts,tsx}": "npm run tslint",
-    "**/*.{ts,tsx,js,jsx}": [
-      "npm run prettier",
-      "git add"
-    ],
-    "*.{json,md,yml}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.5.0",
     "@babel/plugin-proposal-class-properties": "^7.5.0",
     "@babel/preset-env": "^7.5.2",
     "@babel/preset-typescript": "^7.3.3",
     "@types/lodash.isequal": "^4.5.5",
-    "husky": "^3.0.0",
-    "lint-staged": "^9.2.0",
-    "prettier": "^1.18.2",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.3"
