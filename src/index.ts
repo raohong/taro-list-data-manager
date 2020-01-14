@@ -1,4 +1,3 @@
-import Taro from '@tarojs/taro';
 import isEqual from 'lodash.isequal';
 
 const DEFAULT_ITEMSIZE = 60;
@@ -55,10 +54,11 @@ export interface VirutalListDataManagerState<T> {
 }
 
 let index = 0;
+let RATIO = 1;
+
 const VIRTUAL_LIST_DATA_MANAGER_FLAG = 'VIRTUAL_LIST_DATA_MANAGER_FLAG';
 
 const generateId = () => `__${index++}__${VIRTUAL_LIST_DATA_MANAGER_FLAG}`;
-const RATIO = Taro.getSystemInfoSync().windowWidth / 375;
 const LOAD_ITEM_DATA_ID = 'LOAD_ITEM_DATA_ID';
 
 const defaultOptions: Omit<VirutalListDataManagerOptions<any>, 'onChange'> = {
@@ -177,9 +177,14 @@ export class VirutalListDataManager<T = any> {
     | null = null;
   private __timer = 0;
 
-  constructor(options: VirutalListDataManagerOptions<T>) {
+  constructor(options: VirutalListDataManagerOptions<T>, Taro?: any) {
     const params = { ...defaultOptions, ...options };
     const state = getInitialState<T>();
+
+    // 因为 Taro 的 原因,  这里不能本身依赖于 Taro
+    if (typeof Taro === 'object' && Taro) {
+      ratio = Taro.getSystemInfoSync().windowWidth / 375;
+    }
 
     keys.forEach(key => {
       const item = params[key];
