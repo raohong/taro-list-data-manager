@@ -20,6 +20,7 @@ type MiniItemSize =
 type VirutalListDataManagerChangeHandler<T> = (
   items: VirutalListItemData<T>[]
 ) => void;
+
 type VirutalListDataManagerUpdater<T> = (data: T[]) => VirutalListItemData<T>[];
 
 interface VirutalListDataManagerOptions<T> {
@@ -30,11 +31,13 @@ interface VirutalListDataManagerOptions<T> {
   column?: number;
   onChange: VirutalListDataManagerChangeHandler<T>;
 }
+
 interface ILoadStatusResult<T> {
   id: string;
   clearAndAddData: (...values: T[]) => void;
 }
-interface VirutalListDataManagerState<T> {
+
+export interface VirutalListDataManagerState<T> {
   data: T[];
   itemSize: ItemSize;
   overscan: number;
