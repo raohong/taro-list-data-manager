@@ -177,13 +177,13 @@ export class VirutalListDataManager<T = any> {
     | null = null;
   private __timer = 0;
 
-  constructor(options: VirutalListDataManagerOptions<T>, Taro?: any) {
+  constructor(options: VirutalListDataManagerOptions<T>, _Taro?: any) {
     const params = { ...defaultOptions, ...options };
     const state = getInitialState<T>();
 
-    // 因为 Taro 的 原因,  这里不能本身依赖于 Taro
-    if (typeof Taro === 'object' && Taro) {
-      RATIO = Taro.getSystemInfoSync().windowWidth / 375;
+    // 因为 Taro 的 原因,  这里不能本身依赖于 _Taro
+    if (typeof _Taro === 'object' && _Taro) {
+      RATIO = _Taro.getSystemInfoSync().windowWidth / 375;
     }
 
     keys.forEach(key => {
