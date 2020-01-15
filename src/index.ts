@@ -296,13 +296,13 @@ export class VirutalListDataManager<T = any> {
   };
 
   public clearAllLoadStatus = (id?: string) => {
-    const data = this.get().filter(
-      item =>
-        item &&
-        typeof item === 'object' &&
-        (id
-          ? item[LOAD_ITEM_DATA_ID] !== id
-          : item[LOAD_ITEM_DATA_ID] === undefined)
+    const data = this.get().filter(item =>
+      typeof item === 'object' && item
+        ? id
+          ? item[LOAD_ITEM_DATA_ID] === undefined ||
+            item[LOAD_ITEM_DATA_ID] !== id
+          : item[LOAD_ITEM_DATA_ID] === undefined
+        : true
     );
 
     this.set(data);
