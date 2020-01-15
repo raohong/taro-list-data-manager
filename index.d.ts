@@ -50,7 +50,7 @@ export interface VirutalListDataManagerState<T> {
 }
 
 export class VirutalListDataManager<T = any> {
-  constructor(options: VirutalListDataManagerOptions<T>, Taro?:any);
+  constructor(options: VirutalListDataManagerOptions<T>, Taro?: any);
 
   updateConfig: (config: Partial<VirutalListDataManagerOptions<T>>) => void;
   getItemCount: () => number;
@@ -63,7 +63,8 @@ export class VirutalListDataManager<T = any> {
   forceUpdate: () => void;
   destroy: () => void;
   setLoadStatus: (
-    customData?: Record<string | number, any>
+    customData?: Record<string | number, any>,
+    itemSizeOfLoadStatus?: MiniItemSizeValue
   ) => ILoadStatusResult<T>;
   clearAllLoadStatus: (id?: string) => void;
 
@@ -74,6 +75,5 @@ export class VirutalListDataManager<T = any> {
     onStateChange: (prevState: VirutalListDataManagerState<T>) => void
   ) => void;
 }
-
 
 export default VirutalListDataManager;
