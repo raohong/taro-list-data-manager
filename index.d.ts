@@ -35,6 +35,7 @@ interface VirutalListDataManagerOptions<T> {
 interface ILoadStatusResult<T> {
   id: string;
   clearAndAddData: (...values: T[]) => void;
+  clearAndSetData: (...values: T[]) => void;
 }
 
 export interface VirutalListDataManagerState<T> {

@@ -39,7 +39,8 @@ export interface VirutalListDataManagerOptions<T> {
 
 export interface ILoadStatusResult<T> {
   id: string;
-  clearAndAddData: (...values: T[]) => void;
+  clearAndAddData: (...value: T[]) => void;
+  clearAndSetData: (value: T[]) => void;
 }
 
 export interface VirutalListDataManagerState<T> {
@@ -113,7 +114,7 @@ const getItemCount = <T>(data: T[], column: number) => {
   return total;
 };
 
-const itemSizeTransformer = (value: string | number): number => {
+const itemSizeTransformer = (value: MiniItemSizeValue): number => {
   const parser = /^[+-]?\d+(\.\d+)?r?px$/;
   if (typeof value === 'string') {
     if (parser.test(value)) {
@@ -137,8 +138,8 @@ const itemSizeAdapter = (itemSize: MiniItemSize): ItemSize => {
   }
 
   if (typeof itemSize === 'function') {
-    return (index: number) => {
-      const val = itemSize(index);
+    return (i: number) => {
+      const val = itemSize(i);
 
       return itemSizeTransformer(val);
     };
@@ -183,9 +184,8 @@ export class VirutalListDataManager<T = any> {
 
     // 因为 Taro 的 原因,  这里不能本身依赖于 _Taro
     if (typeof _Taro === 'object' && _Taro) {
-
       // web 上没有？
-      if(_Taro.getSystemInfoSync) {
+      if (_Taro.getSystemInfoSync) {
         RATIO = _Taro.getSystemInfoSync().windowWidth / 375;
       } else if (window !== undefined) {
         RATIO = window.innerWidth / 375;
@@ -226,34 +226,72 @@ export class VirutalListDataManager<T = any> {
   }
 
   public setLoadStatus = (
-    customData: Record<string | number, any> = {}
+    customData: Record<string | number, any> = {},
+    itemSizeOfLoadStatus?: MiniItemSizeValue
   ): ILoadStatusResult<T> => {
     let inserted = false;
 
     const id = generateId();
+    const { itemCount, itemSize: rawItemSize } = this.__getState();
+
     const loadStatusData = {
       ...customData,
       [LOAD_ITEM_DATA_ID]: id,
       [VIRTUAL_LIST_DATA_MANAGER_FLAG]: VIRTUAL_LIST_DATA_MANAGER_FLAG
     };
 
+    if (itemSizeOfLoadStatus !== undefined) {
+      const newItemSize: ItemSize = (i: number) => {
+        if (i === itemCount) {
+          return itemSizeTransformer(itemSizeOfLoadStatus!);
+        }
+
+        if (typeof rawItemSize === 'function') {
+          return rawItemSize(i);
+        }
+
+        return rawItemSize as number;
+      };
+
+      this.updateConfig({
+        itemSize: newItemSize
+      });
+    }
+
+    const reset = () => {
+      if (itemSizeOfLoadStatus !== undefined) {
+        this.updateConfig({
+          itemSize: rawItemSize
+        });
+      }
+    };
+
     // @ts-ignore
     this.push(loadStatusData);
 
-    const clearAndAddData = (...value: T[]) => {
-      if (inserted) {
-        return;
-      }
-
-      inserted = true;
-
-      this.clearAllLoadStatus(id);
-      this.push(...value);
-    };
-
     return {
       id,
-      clearAndAddData
+      clearAndAddData: (...value: T[]) => {
+        if (inserted) {
+          return;
+        }
+
+        inserted = true;
+        reset();
+        this.clearAllLoadStatus(id);
+        this.push(...value);
+      },
+      clearAndSetData: (value: T[]) => {
+        if (inserted) {
+          return;
+        }
+
+        inserted = true;
+
+        reset();
+        this.clearAllLoadStatus(id);
+        this.set(value);
+      }
     };
   };
 
