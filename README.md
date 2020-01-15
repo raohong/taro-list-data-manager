@@ -1,43 +1,87 @@
-## @zyou/mention
+## VirtualListDataManager
 
----
+> 虚拟列表数据管理类， 启用虚拟滚动时必传
 
-[![Build Status](https://travis-ci.org/raohong/mention.svg?branch=master)](https://travis-ci.org/raohong/mention) [![Coverage Status](https://coveralls.io/repos/github/raohong/mention/badge.svg?branch=master)](https://coveralls.io/github/raohong/mention?branch=master)
+#### 使用方式
 
-一个 mention 组件
-
-> 来源。业务中有提及需求，比较重要的是，选中 一个 mention 后，删除是整体删除，参考 PC 微信端，利用正则简要轻便实现了此功能
-
-#### Install
-
-`npm i @zyou/mention`
-
-#### Usage
-
-```tsx
-import Mention from '@zyou/mention';
-
-const MentionOption = Mention.Option;
-
-<Mention>
-  <MentionOption value='nickname'>nickname</MentionOption>
-  <MentionOption value='小美'>小美</MentionOption>
-</Mention>;
+```ts
+const dataManager = new VirutalListDataManager({
+  itemSize: 120,
+  onChange: data => {
+    this.setState({
+      list: data
+    });
+  }
+});
 ```
 
 #### API
 
-props
+```ts
+class VirutalListDataManager<T = any> {
+  // 初始化参数
+  constructor(options: VirutalListDataManagerOptions<T>);
+  // 更新配置 参数等同 options
+  updateConfig: (config: Partial<VirutalListDataManagerOptions<T>>) => void;
+  // 清空数据
+  clear: () => void;
+  // push 数据 同 Array.prototype.push
+  push: (...value: T[]) => number;
+  // 设置数据
+  set: (...value: T[]) => void;
+  // 删除或者增加数据, 同 Array.prototype.splice
+  splice: (start: number, deleteCount: number, ...items: T[]) => T[];
+  // 获取整个数据
+  get: () => T[];
+  // 同 Array.prototype.pop
+  pop: () => T | undefined;
+  // 获取当前数据行数
+  getItemCount: () => number;
+  // 更新 Virtual List
+  forceUpdate: () => void;
+  // 设置加载状态 具体使用可参考 demo https://github.com/raohong/taro-list/blob/master/src/pages/list/index.tsx
+  setLoadStatus: (
+    customData?: Record<string | number, any>,
+    itemSizeOfLoadStatus?: MiniItemSizeValue
+  ) => ILoadStatusResult<T>;
+  // 清空所有加载状态 (传入 ID 时清空该 ID)
+  clearAllLoadStatus: (id?: string) => void;
+}
 
-| name         | type                                | required | default   | description                                                                                  |
-| ------------ | ----------------------------------- | -------- | --------- | -------------------------------------------------------------------------------------------- |
-| value        | string                              | false    | undefined | Mention value                                                                                |
-| defaultValue | string                              | false    | undefined | Mention initial value                                                                        |
-| placeholder  | string                              | false    | undefined | Mention placeholder                                                                          |
-| placement    | 'top' or 'bottom'                   | false    | 'bottom'  | Mention Dropdown position                                                                    |
-| autoResize   | boolean                             | false    | true      | Whether textarea enable autoresize                                                           |
-| rows         | number or {min: number, max:number} | false    | 1         | autoresize size config                                                                       |
-| onChange     | (value:string) => void              | false    | undefined | Mention value changed callback                                                               |
-| onSearch     | (value:string) => void              | false    | undefined | Mention search custom handle                                                                 |
-| prefix       | string[] or string                  | false    | '@'       | Trigger character                                                                            |
-| split        | string                              | false    | ' '       | In the not controlled mode, when you insert a mention, the characters added before and after |
+// 初始化参数
+interface VirutalListDataManagerOptions<T> {
+  // 虚拟列表项目每个大小, 支持 number / string / number[] / string[] / () => string[] | number[] , 默认 50
+  itemSize?: MiniItemSize;
+  // 每行的列数 具体使用可参考 demo https://github.com/raohong/taro-list/blob/master/src/pages/list/index.tsx
+  column?: number;
+  // 项目估算大小 默认 60
+  estimatedSize?: number;
+  // sticky 数组, 通过 sticky 定位实现
+  stickyIndices?: number[];
+  // 提前渲染项目数量, 增大可避免快速滚动白屏, 默认 5
+  overscan?: number;
+  // 必传, 将当前要渲染的数据更新
+  onChange: VirutalListDataManagerChangeHandler<T>;
+}
+
+type MiniItemSizeValue = string | number;
+type MiniItemSize =
+  | MiniItemSizeValue
+  | MiniItemSizeValue[]
+  | ((index: number) => MiniItemSizeValue);
+
+interface SizeAndPositionOfItemData {
+  index: number;
+  style: ItemStyle;
+}
+
+interface VirutalListItemData<T = any> extends SizeAndPositionOfItemData {
+  item: T;
+}
+
+type VirutalListDataManagerChangeHandler<T> = (
+  items: VirutalListItemData<T>[]
+) => void;
+
+type VirutalListDataManagerUpdater<T> = (data: T[]) => VirutalListItemData<T>[];
+```
