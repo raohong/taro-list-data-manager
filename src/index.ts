@@ -393,10 +393,8 @@ export class VirutalListDataManager<T = any> {
     if (typeof this.__updater === 'function') {
       const { onChange, data } = this.__state;
       const items = this.__updater(data);
-      const sizeAndPositionOfItemData = items.map(item => ({
-        style: item.style,
-        index: item.index
-      }));
+      // 02/06 整个都参与比较 存在因为数据的不同渲染不同 DOM
+      const sizeAndPositionOfItemData = items;
 
       if (this._checkShouldUpdate(sizeAndPositionOfItemData) && check) {
         this.__lastSizeAndPositionData = sizeAndPositionOfItemData;
