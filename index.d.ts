@@ -69,6 +69,7 @@ export class VirutalListDataManager<T = any> {
   clearAllLoadStatus: (id?: string) => void;
 
   __nextTickUpdate: () => void;
+  __updateItemCount: (data?: T[], column?: number) => void;
   __getState: () => VirutalListDataManagerState<T>;
   __setUpdater: (cb: VirutalListDataManagerUpdater<T>) => void;
   __setOnStateChange: (

@@ -157,18 +157,6 @@ const keys: (keyof VirutalListDataManagerState<any>)[] = [
   'column'
 ];
 
-const getInitialState = <T>() => {
-  const state = { data: [] as T[] } as VirutalListDataManagerState<T>;
-
-  Object.defineProperty(state, 'itemCount', {
-    get() {
-      return getItemCount(state.data, state.column);
-    }
-  });
-
-  return state;
-};
-
 export class VirutalListDataManager<T = any> {
   private __lastSizeAndPositionData: SizeAndPositionOfItemData[] | null = null;
   private __state: VirutalListDataManagerState<T>;
@@ -180,7 +168,7 @@ export class VirutalListDataManager<T = any> {
 
   constructor(options: VirutalListDataManagerOptions<T>, _Taro?: any) {
     const params = { ...defaultOptions, ...options };
-    const state = getInitialState<T>();
+    const state = { data: [] } as VirutalListDataManagerState<T>;
 
     // 因为 Taro 的 原因,  这里不能本身依赖于 _Taro
     if (typeof _Taro === 'object' && _Taro) {
@@ -218,6 +206,8 @@ export class VirutalListDataManager<T = any> {
         state[key] = key === 'itemSize' ? itemSizeAdapter(item) : item;
       }
     });
+
+    this.__updateItemCount();
 
     if (needUpdated) {
       this._triggerStateChange(prevState);
@@ -314,9 +304,14 @@ export class VirutalListDataManager<T = any> {
 
   public clear = () => {
     const { data, itemCount } = this.__state;
+
     data.length = 0;
 
-    this._triggerStateChange({ ...this.__state, itemCount });
+    this.__updateItemCount();
+    this._triggerStateChange({
+      ...this.__state,
+      itemCount
+    });
     this.__nextTickUpdate();
   };
 
@@ -324,6 +319,8 @@ export class VirutalListDataManager<T = any> {
     const { data, itemCount } = this.__state;
 
     data.push(...value);
+
+    this.__updateItemCount();
     this._triggerStateChange({ ...this.__state, itemCount });
     this.__nextTickUpdate();
 
@@ -334,6 +331,8 @@ export class VirutalListDataManager<T = any> {
     const { itemCount } = this.__state;
 
     this.__state.data = value;
+
+    this.__updateItemCount();
     this._triggerStateChange({ ...this.__state, itemCount });
     this.__nextTickUpdate();
   };
@@ -342,22 +341,35 @@ export class VirutalListDataManager<T = any> {
     const { itemCount } = this.__state;
 
     const removed = this.__state.data.splice(start, deleteCount, ...items);
+
+    this.__updateItemCount();
     this._triggerStateChange({ ...this.__state, itemCount });
     this.__nextTickUpdate();
 
     return removed;
   };
 
+  public pop = (): T | undefined => {
+    const poped = this.__state.data.pop();
+
+    this.__updateItemCount();
+
+    return poped;
+  };
+
   public get = (): T[] => {
     return this.__state.data;
   };
 
-  public pop = (): T | undefined => {
-    return this.__state.data.pop();
-  };
-
   public __nextTickUpdate() {
     this._nextTick(this._update);
+  }
+
+  private __updateItemCount(
+    data = this.__state.data,
+    column = this.__state.column
+  ) {
+    this.__state.itemCount = getItemCount(data, column);
   }
 
   public __getState() {
