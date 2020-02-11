@@ -58,7 +58,7 @@ let index = 0;
 let RATIO = 1;
 
 const VIRTUAL_LIST_DATA_MANAGER_FLAG = 'VIRTUAL_LIST_DATA_MANAGER_FLAG';
-
+const toString = Object.prototype.toString;
 const generateId = () => `__${index++}__${VIRTUAL_LIST_DATA_MANAGER_FLAG}`;
 const LOAD_ITEM_DATA_ID = 'LOAD_ITEM_DATA_ID';
 
@@ -83,7 +83,7 @@ const getItemCount = <T>(data: T[], column: number) => {
     total += 1;
 
     // 这里过滤掉用户可能传入的基本数据
-    if (typeof data[i] !== 'object' && data[i]) {
+    if (toString.call(data[i]) !== '[object Object]') {
       i++;
       continue;
     }
@@ -373,7 +373,7 @@ export class VirutalListDataManager<T = any> {
   }
 
   public __getState() {
-    return { ...this.__state, itemCount: this.__state.itemCount };
+    return { ...this.__state };
   }
 
   public __setUpdater = (cb: VirutalListDataManagerUpdater<T>) => {
@@ -423,8 +423,6 @@ export class VirutalListDataManager<T = any> {
   }
 
   private _triggerStateChange = (prevState: VirutalListDataManagerState<T>) => {
-    this._clearTimer();
-
     if (typeof this.__onStateChange === 'function') {
       this.__onStateChange(prevState);
     }
