@@ -82,28 +82,18 @@ const getItemCount = <T>(data: T[], column: number) => {
   while (i < length) {
     total += 1;
 
-    // 这里过滤掉用户可能传入的基本数据
-    if (toString.call(data[i]) !== '[object Object]') {
-      i++;
-      continue;
-    }
-
-    const type = data[i][VIRTUAL_LIST_DATA_MANAGER_FLAG];
-
-    // 状态点或者最后一个
-    if (type === VIRTUAL_LIST_DATA_MANAGER_FLAG || i === length - 1) {
-      i++;
-
-      continue;
-    }
-
     let j = 1;
+    let k = i;
 
     while (
       j < column &&
-      i + j < length &&
-      (data[i + j][VIRTUAL_LIST_DATA_MANAGER_FLAG] === undefined ||
-        !data[i + j])
+      // tslint:disable-next-line: no-conditional-assignment
+      (k = i + j) < length &&
+      // 非状态第点
+      !(
+        toString.call(data[k]) === '[object Object]' &&
+        data[k][VIRTUAL_LIST_DATA_MANAGER_FLAG] === undefined
+      )
     ) {
       j++;
     }
@@ -279,7 +269,8 @@ export class VirutalListDataManager<T = any> {
         inserted = true;
 
         reset();
-        this.clearAllLoadStatus(id);
+        // 02.12 因为是直接设置数据 这里不再需要清除状态点
+        // this.clearAllLoadStatus(id);
         this.set(value);
       }
     };
@@ -438,8 +429,8 @@ export class VirutalListDataManager<T = any> {
 
   private _clearTimer() {
     if (this.__timer) {
-      this.__timer = 0;
       clearTimeout(this.__timer);
+      this.__timer = 0;
     }
   }
 }
