@@ -1,0 +1,10 @@
+sudo: false
+language: node_js
+node_js:
+  - 'node'
+cache:
+  npm: false
+script:
+  - npm test -- --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+service_name: travis-pro
+repo_token: gRF9r73O3gXpAa76rNcTwP0wQLX3q8ARu
