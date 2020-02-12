@@ -7,4 +7,4 @@ cache:
 script:
   - npm test -- --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 service_name: travis-pro
-repo_token: 9ef3fede6ea119bc46064dae66660503e06c6d86
+repo_token: 6wQ5OJFbSKmA87bdH8cdgFvundT1KzYhh
