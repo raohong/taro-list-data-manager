@@ -1,14 +1,18 @@
 {
   "name": "taro-list-data-manager",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "taro-list 虚拟列表数据管理",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest",
+    "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js"
   },
-  "keywords": [],
+  "keywords": [
+    "taro-list"
+  ],
   "author": "raohong",
   "license": "MIT",
   "devDependencies": {
@@ -16,10 +20,14 @@
     "@babel/plugin-proposal-class-properties": "^7.5.0",
     "@babel/preset-env": "^7.5.2",
     "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^25.1.2",
     "@types/lodash.isequal": "^4.5.5",
+    "@types/react": "^16.8.23",
+    "babel-jest": "^25.1.0",
+    "coveralls": "^3.0.9",
+    "jest": "^25.1.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "@types/react": "^16.8.23",
     "typescript": "^3.5.3"
   },
   "browserslist": [
@@ -29,5 +37,11 @@
   ],
   "dependencies": {
     "lodash.isequal": "^4.5.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   }
 }
