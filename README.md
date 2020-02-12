@@ -1,6 +1,14 @@
 ## VirtualListDataManager
 
+[![Build Status](https://travis-ci.org/raohong/taro-list-data-manager.svg?branch=master)](https://travis-ci.org/raohong/taro-list-data-manager)
+
 > 虚拟列表数据管理类， 启用虚拟滚动时必传
+
+由于小程序不能动态渲染视图， 通过暴露一系列方法操作数据和更新配置, 然后再通过函数回调的方式把数据传给上层, 然后进行渲染。
+
+更新数据的时候, 首先同步触发 `stateChange`, 得到当前总高度; 通过设置好的回调,在下一个事件循环中, 通知虚拟列表返回当前位置的数据。
+
+更新 itemSize, column 等数据也会触发上一步骤。
 
 #### 使用方式
 
