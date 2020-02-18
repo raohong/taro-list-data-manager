@@ -1,6 +1,6 @@
 ## VirtualListDataManager
 
-[![Build Status](https://travis-ci.org/raohong/taro-list-data-manager.svg?branch=master)](https://travis-ci.org/raohong/taro-list-data-manager)
+[![Build Status](https://travis-ci.org/raohong/taro-list-data-manager.svg?branch=master)](https://travis-ci.org/raohong/taro-list-data-manager)[![Coverage Status](https://coveralls.io/repos/github/raohong/taro-list-data-manager/badge.svg?branch=master)](https://coveralls.io/github/raohong/taro-list-data-manager?branch=master)
 
 > 虚拟列表数据管理类， 启用虚拟滚动时必传
 
