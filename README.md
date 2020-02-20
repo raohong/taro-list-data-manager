@@ -13,7 +13,7 @@
 #### 使用方式
 
 ```ts
-const dataManager = new VirutalListDataManager({
+const dataManager = new VirtualListDataManager({
   itemSize: 120,
   onChange: data => {
     this.setState({
@@ -26,11 +26,11 @@ const dataManager = new VirutalListDataManager({
 #### API
 
 ```ts
-class VirutalListDataManager<T = any> {
+class VirtualListDataManager<T = any> {
   // 初始化参数
-  constructor(options: VirutalListDataManagerOptions<T>);
+  constructor(options: VirtualListDataManagerOptions<T>);
   // 更新配置 参数等同 options
-  updateConfig: (config: Partial<VirutalListDataManagerOptions<T>>) => void;
+  updateConfig: (config: Partial<VirtualListDataManagerOptions<T>>) => void;
   // 清空数据
   clear: () => void;
   // push 数据 同 Array.prototype.push
@@ -57,7 +57,7 @@ class VirutalListDataManager<T = any> {
 }
 
 // 初始化参数
-interface VirutalListDataManagerOptions<T> {
+interface VirtualListDataManagerOptions<T> {
   // 虚拟列表项目每个大小, 支持 number / string / number[] / string[] / () => string[] | number[] , 默认 50
   itemSize?: MiniItemSize;
   // 每行的列数 具体使用可参考 demo https://github.com/raohong/taro-list/blob/master/src/pages/list/index.tsx
@@ -69,7 +69,7 @@ interface VirutalListDataManagerOptions<T> {
   // 提前渲染项目数量, 增大可避免快速滚动白屏, 默认 5
   overscan?: number;
   // 必传, 将当前要渲染的数据更新
-  onChange: VirutalListDataManagerChangeHandler<T>;
+  onChange: VirtualListDataManagerChangeHandler<T>;
 }
 
 type MiniItemSizeValue = string | number;
@@ -83,13 +83,13 @@ interface SizeAndPositionOfItemData {
   style: ItemStyle;
 }
 
-interface VirutalListItemData<T = any> extends SizeAndPositionOfItemData {
+interface VirtualListItemData<T = any> extends SizeAndPositionOfItemData {
   item: T;
 }
 
-type VirutalListDataManagerChangeHandler<T> = (
-  items: VirutalListItemData<T>[]
+type VirtualListDataManagerChangeHandler<T> = (
+  items: VirtualListItemData<T>[]
 ) => void;
 
-type VirutalListDataManagerUpdater<T> = (data: T[]) => VirutalListItemData<T>[];
+type VirtualListDataManagerUpdater<T> = (data: T[]) => VirtualListItemData<T>[];
 ```

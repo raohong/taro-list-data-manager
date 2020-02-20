@@ -11,7 +11,7 @@ interface SizeAndPositionOfItemData {
 
 type ItemSize = number | number[] | ((index: number) => number);
 
-export interface VirutalListItemData<T = any>
+export interface VirtualListItemData<T = any>
   extends SizeAndPositionOfItemData {
   item: T;
 }
@@ -22,19 +22,19 @@ type MiniItemSize =
   | MiniItemSizeValue[]
   | ((index: number) => MiniItemSizeValue);
 
-type VirutalListDataManagerChangeHandler<T> = (
-  items: VirutalListItemData<T>[]
+type VirtualListDataManagerChangeHandler<T> = (
+  items: VirtualListItemData<T>[]
 ) => void;
 
-type VirutalListDataManagerUpdater<T> = (data: T[]) => VirutalListItemData<T>[];
+type VirtualListDataManagerUpdater<T> = (data: T[]) => VirtualListItemData<T>[];
 
-export interface VirutalListDataManagerOptions<T> {
+export interface VirtualListDataManagerOptions<T> {
   itemSize?: MiniItemSize;
   estimatedSize?: number;
   stickyIndices?: number[];
   overscan?: number;
   column?: number;
-  onChange: VirutalListDataManagerChangeHandler<T>;
+  onChange: VirtualListDataManagerChangeHandler<T>;
 }
 
 export interface ILoadStatusResult<T> {
@@ -43,7 +43,7 @@ export interface ILoadStatusResult<T> {
   clearAndSetData: (value: T[]) => void;
 }
 
-export interface VirutalListDataManagerState<T> {
+export interface VirtualListDataManagerState<T> {
   data: T[];
   itemSize: ItemSize;
   overscan: number;
@@ -51,7 +51,7 @@ export interface VirutalListDataManagerState<T> {
   itemCount: number;
   estimatedSize: number;
   stickyIndices: number[];
-  onChange: VirutalListDataManagerChangeHandler<T>;
+  onChange: VirtualListDataManagerChangeHandler<T>;
 }
 
 let index = 0;
@@ -62,7 +62,7 @@ const toString = Object.prototype.toString;
 const generateId = () => `__${index++}__${VIRTUAL_LIST_DATA_MANAGER_FLAG}`;
 const LOAD_ITEM_DATA_ID = 'LOAD_ITEM_DATA_ID';
 
-const defaultOptions: Omit<VirutalListDataManagerOptions<any>, 'onChange'> = {
+const defaultOptions: Omit<VirtualListDataManagerOptions<any>, 'onChange'> = {
   estimatedSize: DEFAULT_ITEMSIZE,
   itemSize: DEFAULT_ITEMSIZE,
   overscan: DEFAULT_OVERSCAN,
@@ -138,7 +138,7 @@ const itemSizeAdapter = (itemSize: MiniItemSize): ItemSize => {
   return itemSize || 0;
 };
 
-const keys: (keyof VirutalListDataManagerState<any>)[] = [
+const keys: (keyof VirtualListDataManagerState<any>)[] = [
   'estimatedSize',
   'itemSize',
   'overscan',
@@ -147,18 +147,18 @@ const keys: (keyof VirutalListDataManagerState<any>)[] = [
   'column'
 ];
 
-export class VirutalListDataManager<T = any> {
+export class VirtualListDataManager<T = any> {
   private __lastSizeAndPositionData: SizeAndPositionOfItemData[] | null = null;
-  private __state: VirutalListDataManagerState<T>;
-  private __updater: VirutalListDataManagerUpdater<T> | null = null;
+  private __state: VirtualListDataManagerState<T>;
+  private __updater: VirtualListDataManagerUpdater<T> | null = null;
   private __onStateChange:
-    | ((prevState: VirutalListDataManagerState<T>) => void)
+    | ((prevState: VirtualListDataManagerState<T>) => void)
     | null = null;
   private __timer = 0;
 
-  constructor(options: VirutalListDataManagerOptions<T>, _Taro?: any) {
+  constructor(options: VirtualListDataManagerOptions<T>, _Taro?: any) {
     const params = { ...defaultOptions, ...options };
-    const state = { data: [] } as VirutalListDataManagerState<T>;
+    const state = { data: [] } as VirtualListDataManagerState<T>;
 
     // 因为 Taro 的 原因,  这里不能本身依赖于 _Taro
     if (typeof _Taro === 'object' && _Taro) {
@@ -181,7 +181,7 @@ export class VirutalListDataManager<T = any> {
     this.__state = state;
   }
 
-  public updateConfig(config: Partial<VirutalListDataManagerOptions<T>>) {
+  public updateConfig(config: Partial<VirtualListDataManagerOptions<T>>) {
     const state = this.__state;
     const prevState = { ...state };
 
@@ -367,12 +367,12 @@ export class VirutalListDataManager<T = any> {
     return { ...this.__state };
   }
 
-  public __setUpdater = (cb: VirutalListDataManagerUpdater<T>) => {
+  public __setUpdater = (cb: VirtualListDataManagerUpdater<T>) => {
     this.__updater = cb;
   };
 
   public __setOnStateChange = (
-    onStateChange: (prevState: VirutalListDataManagerState<T>) => void
+    onStateChange: (prevState: VirtualListDataManagerState<T>) => void
   ) => {
     if (typeof onStateChange === 'function') {
       this.__onStateChange = onStateChange;
@@ -413,7 +413,7 @@ export class VirutalListDataManager<T = any> {
     return !isEqual(this.__lastSizeAndPositionData, items);
   }
 
-  private _triggerStateChange = (prevState: VirutalListDataManagerState<T>) => {
+  private _triggerStateChange = (prevState: VirtualListDataManagerState<T>) => {
     if (typeof this.__onStateChange === 'function') {
       this.__onStateChange(prevState);
     }
@@ -435,4 +435,4 @@ export class VirutalListDataManager<T = any> {
   }
 }
 
-export default VirutalListDataManager;
+export default VirtualListDataManager;

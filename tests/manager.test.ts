@@ -1,11 +1,11 @@
-import DataManager, { VirutalListDataManagerOptions } from '../src';
-import { VirutalListDataManagerState } from '..';
+import DataManager, { VirtualListDataManagerOptions } from '../src';
+import { VirtualListDataManagerState } from '..';
 
 const noop = () => undefined;
 const sleep = (wait = 0) => new Promise(r => setTimeout(r, wait));
 
 const createDataManager = <T = any>(
-  params: VirutalListDataManagerOptions<T> = {
+  params: VirtualListDataManagerOptions<T> = {
     onChange: noop
   }
 ) =>

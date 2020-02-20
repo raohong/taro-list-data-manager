@@ -5,7 +5,7 @@ interface SizeAndPositionOfItemData {
 
 type ItemSize = number | number[] | ((index: number) => number);
 
-export interface VirutalListItemData<T = any>
+export interface VirtualListItemData<T = any>
   extends SizeAndPositionOfItemData {
   item: T;
 }
@@ -17,19 +17,19 @@ type MiniItemSize =
   | MiniItemSizeValue[]
   | ((index: number) => MiniItemSizeValue);
 
-type VirutalListDataManagerChangeHandler<T> = (
-  items: VirutalListItemData<T>[]
+type VirtualListDataManagerChangeHandler<T> = (
+  items: VirtualListItemData<T>[]
 ) => void;
 
-type VirutalListDataManagerUpdater<T> = (data: T[]) => VirutalListItemData<T>[];
+type VirtualListDataManagerUpdater<T> = (data: T[]) => VirtualListItemData<T>[];
 
-interface VirutalListDataManagerOptions<T> {
+interface VirtualListDataManagerOptions<T> {
   itemSize?: MiniItemSize;
   estimatedSize?: number;
   stickyIndices?: number[];
   overscan?: number;
   column?: number;
-  onChange: VirutalListDataManagerChangeHandler<T>;
+  onChange: VirtualListDataManagerChangeHandler<T>;
 }
 
 interface ILoadStatusResult<T> {
@@ -38,7 +38,7 @@ interface ILoadStatusResult<T> {
   clearAndSetData: (...values: T[]) => void;
 }
 
-export interface VirutalListDataManagerState<T> {
+export interface VirtualListDataManagerState<T> {
   data: T[];
   itemSize: ItemSize;
   overscan: number;
@@ -46,13 +46,13 @@ export interface VirutalListDataManagerState<T> {
   itemCount: number;
   estimatedSize: number;
   stickyIndices: number[];
-  onChange: VirutalListDataManagerChangeHandler<T>;
+  onChange: VirtualListDataManagerChangeHandler<T>;
 }
 
-export class VirutalListDataManager<T = any> {
-  constructor(options: VirutalListDataManagerOptions<T>, Taro?: any);
+export class VirtualListDataManager<T = any> {
+  constructor(options: VirtualListDataManagerOptions<T>, Taro?: any);
 
-  updateConfig: (config: Partial<VirutalListDataManagerOptions<T>>) => void;
+  updateConfig: (config: Partial<VirtualListDataManagerOptions<T>>) => void;
   getItemCount: () => number;
   clear: () => void;
   push: (...value: T[]) => number;
@@ -70,11 +70,11 @@ export class VirutalListDataManager<T = any> {
 
   __nextTickUpdate: () => void;
   __updateItemCount: (data?: T[], column?: number) => void;
-  __getState: () => VirutalListDataManagerState<T>;
-  __setUpdater: (cb: VirutalListDataManagerUpdater<T>) => void;
+  __getState: () => VirtualListDataManagerState<T>;
+  __setUpdater: (cb: VirtualListDataManagerUpdater<T>) => void;
   __setOnStateChange: (
-    onStateChange: (prevState: VirutalListDataManagerState<T>) => void
+    onStateChange: (prevState: VirtualListDataManagerState<T>) => void
   ) => void;
 }
 
-export default VirutalListDataManager;
+export default VirtualListDataManager;
